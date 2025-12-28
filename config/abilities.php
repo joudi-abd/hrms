@@ -1,0 +1,61 @@
+<?php
+return[
+    'employees.view' => 'View Employees',
+    'employees.view_own' => 'View Own Employees',
+    'employees.view_department' => 'View Department Employees',
+    'employees.create' => 'Create Employees',
+    'employees.edit' => 'Edit Employees',
+    'employees.delete' => 'Delete Employees',
+
+    'departments.view' => 'View Departments',
+    'departments.view_own' => 'View Own Departments',
+    'departments.create' => 'Create Departments',
+    'departments.edit' => 'Edit Departments',
+    'departments.delete' => 'Delete Departments',
+
+    'tasks.view' => 'View Tasks',
+    'tasks.view_own' => 'View Own Tasks',
+    'tasks.view_department' => 'View Department Tasks',
+    'tasks.create' => 'Create Tasks',
+    'tasks.edit' => 'Edit Tasks',
+    'tasks.change_status' => 'Change Task Status',
+    'tasks.delete' => 'Delete Tasks',
+
+    'leaves.view' => 'View Leaves',
+    'leaves.view_own' => 'View Own Leaves',
+    'leaves.view_department' => 'View Department Leaves',
+    'leaves.create' => 'Create Leaves',
+    'leaves.edit' => 'Edit Leaves',
+    'leaves.approve' => 'Approve Leaves',
+    'leaves.reject' => 'Reject Leaves',
+    'leaves.delete' => 'Delete Leaves',
+
+    'leave_types.view' => 'View Leave Types',
+    'leave_types.create' => 'Create Leave Types',
+    'leave_types.edit' => 'Edit Leave Types',
+    'leave_types.delete' => 'Delete Leave Types',
+
+    'payrolls.view' => 'View Payrolls',
+    'payrolls.view_own' => 'View Own Payrolls',
+    'payrolls.generate' => 'Generate Payrolls',
+    'payrolls.pay' => 'Pay Payrolls',
+    'payrolls.edit' => 'Edit Payrolls',
+    'payrolls.delete' => 'Delete Payrolls',
+
+    'attendance.view' => 'View Attendance',
+    'attendance.view_own' => 'View Own Attendance',
+    'attendance.view_department' => 'View Department Attendance',
+    'attendance.check_in' => 'Check In',
+    'attendance.check_out' => 'Check Out',
+    'attendance.edit' => 'Edit Attendance',
+    'attendance.delete' => 'Delete Attendance',
+    'attendance.create_daily' => 'Create Daily Attendance',
+
+    'roles.view' => 'View Roles',
+    'roles.create' => 'Create Roles',
+    'roles.edit' => 'Edit Roles',
+    'roles.delete' => 'Delete Roles',
+
+    'reports.view' => 'View Reports',
+    'reports.export_pdf' => 'Export Reports as PDF',
+];
