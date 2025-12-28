@@ -53,14 +53,14 @@
                     <div class="d-flex gap-2">
                         @can('checkIn', App\Models\Attendance::class)
                             <button class="btn btn-success w-50 py-3" data-bs-toggle="modal" data-bs-target="#checkInModal"
-                                @if(($userAttendanceToday && $userAttendanceToday->check_in) || ($userAttendanceToday->status ?? null) == 'leave') disabled @endif>
+                                @if(!$userAttendanceToday || ($userAttendanceToday && $userAttendanceToday->check_in) || ($userAttendanceToday->status ?? null) == 'leave') disabled @endif>
                                 <h4 class="mb-0 text-white">
                                     <i class="fa fa-solid fa-right-to-bracket me-1"></i>
                                     {{ __('Check In') }}
                                 </h4>
                             </button>
                             <button class="btn btn-danger w-50 py-3" data-bs-toggle="modal" data-bs-target="#checkOutModal"
-                                @if(!$userAttendanceToday || ($userAttendanceToday && $userAttendanceToday->check_out) || ($userAttendanceToday->status ?? null) == 'leave') disabled @endif>
+                                @if(($userAttendanceToday && !$userAttendanceToday->check_in) || ($userAttendanceToday && $userAttendanceToday->check_out) || ($userAttendanceToday->status ?? null) == 'leave') disabled @endif>
                                 <h4 class="mb-0 text-white">
                                     <i class="fa fa-solid fa-right-from-bracket me-1"></i>
                                     {{ __('Check Out') }}

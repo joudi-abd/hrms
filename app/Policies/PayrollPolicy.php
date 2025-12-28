@@ -56,7 +56,7 @@ class PayrollPolicy
         return $employee->hasAbility('payrolls.delete');
     }
 
-    public function pay(Employee $employee, Payroll $payroll): bool
+    public function pay(Employee $employee): bool
     {
         return $employee->hasAbility('payrolls.pay');
     }

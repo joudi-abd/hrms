@@ -49,7 +49,7 @@
     @endcan
 
     {{-- Absent Today --}}
-    @can('viewAny', App\Models\Attendance::class)
+    @can('createDaily', App\Models\Attendance::class)
     <div class="kpi-card warning">
         <div class="kpi-icon d-flex justify-content-between">
             <div class="kpi-label">{{ __('Absent Today') }}</div>

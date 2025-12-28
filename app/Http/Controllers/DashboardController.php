@@ -14,8 +14,23 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        // إجمالي الموظفين
-        $totalEmployees = Employee::count();
+        $employee = auth()->user();
+        $totalEmployees = 0;
+        $presentToday = 0;
+        $absentToday = 0;
+        $latestEmployees = 0;
+        $activeEmployees =0;
+        $totalPayrollThisMonth = 0;
+        $paidPayrollThisMonth = 0;
+        if($employee->super_admin || $employee->hasAbility('employees.view')){
+            $totalEmployees = Employee::count();
+        } elseif($employee->hasAbility('employees.view_department')){
+            $employee->load(['department.employees' => function($q) use ($employee){
+                $q->where('department_id' , $employee->department_id);
+            }]);
+            $totalEmployees = $employee->department->employees->count();
+        } 
+     
 
         // الموظفون الجدد هذا الشهر
         $newEmployeesThisMonth = Employee::whereMonth('created_at', now()->month)->count();
@@ -26,28 +41,89 @@ class DashboardController extends Controller
         // الأقسام النشطة (مثلاً: بها موظفون نشطون)
         $activeDepartments = Department::has('employees', '>', 0)->count();
 
-        // الحضور اليوم
-        $presentToday = Attendance::whereDate('date', now())->where('status', 'present')->count();
-        $absentToday = Attendance::whereDate('date', now())->where('status', 'absent')->count();
+        if($employee->super_admin || $employee->hasAbility('attendance.view')){
+            $presentToday = Attendance::whereDate('date', now())->where('status', 'present')->count();
+            $absentToday = Attendance::whereDate('date', now())->where('status', 'absent')->count();
+        } elseif($employee->hasAbility('attendance.view_department')){
+            $presentToday = Attendance::whereDate('date', now())
+                ->where('status', 'present')
+                ->whereHas('employee', function($q) use ($employee){
+                    $q->where('department_id' , $employee->department_id);
+                })->count();
+            $absentToday = Attendance::whereDate('date', now())
+                ->where('status', 'absent')
+                ->whereHas('employee', function($q) use ($employee){
+                    $q->where('department_id' , $employee->department_id);
+                })->count();
+        } 
 
-        // طلبات الإجازة
-        $pendingLeaves = LeaveRequest::where('status', 'pending')->get();
-        $pendingLeavesCount = LeaveRequest::where('status', 'pending')->count();
-        $approvedLeaves = LeaveRequest::where('status', 'approved')->count();
+        if($employee->super_admin || $employee->hasAbility('leaves.view')){
+            $pendingLeaves = LeaveRequest::where('status', 'pending')->get();
+            $pendingLeavesCount = LeaveRequest::where('status', 'pending')->count();
+            $approvedLeaves = LeaveRequest::where('status', 'approved')->count();
+        } elseif($employee->hasAbility('leaves.view_department')){
+            $pendingLeaves = LeaveRequest::whereHas('employee', function($q) use ($employee){
+                $q->where('department_id' , $employee->department_id);
+            })->where('status', 'pending')->get();
+            $pendingLeavesCount = LeaveRequest::whereHas('employee', function($q) use ($employee){
+                $q->where('department_id' , $employee->department_id);
+            })->where('status', 'pending')->count();
+            $approvedLeaves = LeaveRequest::whereHas('employee', function($q) use ($employee){
+                $q->where('department_id' , $employee->department_id);
+            })->where('status', 'approved')->count();
+        } else {
+            $pendingLeaves = LeaveRequest::where('employee_id', $employee->id)
+                ->where('status', 'pending')->get();
+            $pendingLeavesCount = LeaveRequest::where('employee_id', $employee->id)
+                ->where('status', 'pending')->count();
+            $approvedLeaves = LeaveRequest::where('employee_id', $employee->id)
+                ->where('status', 'approved')->count();
+        }
 
-        // الرواتب
-        $totalPayrollThisMonth = Payroll::whereMonth('payroll_month', now()->month)->sum('net_salary');
-        $paidPayrollThisMonth = Payroll::whereMonth('payroll_month', now()->month)->where('date_paid')->sum('net_salary');
+        if($employee->super_admin || $employee->hasAbility('payrolls.view')){
+            $totalPayrollThisMonth = Payroll::whereMonth('payroll_month', now()->month)->sum('net_salary');
+            $paidPayrollThisMonth = Payroll::whereMonth('payroll_month', now()->month)->where('date_paid')->sum('net_salary');
+        }
 
-        // المهام المعلقة والمكتملة (Tasks model لو موجود)
-        $tasks = Task::all();
-        $pendingTasks = Task::where('status', 'pending')->count();
-        $processingTasks = Task::where('status', 'in_progress')->count();
-        $completedTasks = Task::where('status', 'completed')->count();
 
-        // أحدث الموظفين
-        $activeEmployees = Employee::where('status', 'active')->count();
-        $latestEmployees = Employee::with('department')->orderBy('created_at', 'desc')->limit(5)->get();
+        if($employee->super_admin || $employee->hasAbility('tasks.view')){
+            $tasks = Task::all();
+            $pendingTasks = Task::where('status', 'pending')->count();
+            $processingTasks = Task::where('status', 'in_progress')->count();
+            $completedTasks = Task::where('status', 'completed')->count();
+        } elseif($employee->hasAbility('tasks.view_department')){
+            $tasks = Task::whereHas('assignedEmployee', function($q) use ($employee){
+                $q->where('department_id' , $employee->department_id);
+            })->get();
+            $pendingTasks = Task::whereHas('assignedEmployee', function($q) use ($employee){
+                $q->where('department_id' , $employee->department_id);
+            })->where('status', 'pending')->count();
+            $processingTasks = Task::whereHas('assignedEmployee', function($q) use ($employee){
+                $q->where('department_id' , $employee->department_id);
+            })->where('status', 'in_progress')->count();
+            $completedTasks = Task::whereHas('assignedEmployee', function($q) use ($employee){
+                $q->where('department_id' , $employee->department_id);
+            })->where('status', 'completed')->count();
+        } else {
+            $tasks = Task::where('assigned_to' , $employee->id)->get();
+            $pendingTasks = Task::where('assigned_to' , $employee->id)->where('status', 'pending')->count();
+            $processingTasks = Task::where('assigned_to' , $employee->id)->where('status', 'in_progress')->count();
+            $completedTasks = Task::where('assigned_to' , $employee->id)->where('status', 'completed')->count();
+        }
+
+        if($employee->super_admin || $employee->hasAbility('employees.view')){
+            $activeEmployees = Employee::where('status', 'active')->count();
+            $latestEmployees = Employee::with('department')->orderBy('created_at', 'desc')->limit(5)->get();
+        } elseif($employee->hasAbility('employees.view_department')){
+            $activeEmployees = Employee::where('status', 'active')
+                ->where('department_id', $employee->department_id)
+                ->count();
+            $latestEmployees = Employee::with('department')
+                ->where('department_id', $employee->department_id)
+                ->orderBy('created_at', 'desc')
+                ->limit(5)
+                ->get();
+        }
 
         // بيانات الرسوم البيانية
         $months = collect(range(1, 12))->map(function ($m) {
@@ -63,7 +139,7 @@ class DashboardController extends Controller
             $monthlyPayroll[] = Payroll::whereMonth('payroll_month', $month)->sum('net_salary');
         }
 
-        $employee = auth()->user();
+        
         $leaveTypes = \App\Models\LeaveType::all();
         $leaveBalances = [];
 

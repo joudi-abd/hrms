@@ -1,3 +1,4 @@
+@can('createDaily', App\Models\Attendance::class)
 <div class="row mt-6">
     <div class="col-xl-6 col-md-12">
         <div class="card">
@@ -9,7 +10,8 @@
             </div>
         </div>
     </div>
-
+@endcan
+@can('pay' , App\Models\Payroll::class)
     <div class="col-xl-6 col-md-12">
         <div class="card">
             <div class="card-header bg-white border-bottom-0 py-4">
@@ -21,7 +23,7 @@
         </div>
     </div>
 </div>
-
+@endcan
 @push('scripts')
 <script>
 var attendanceChart = new ApexCharts(document.querySelector("#attendanceChart"), {
