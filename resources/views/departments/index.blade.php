@@ -137,4 +137,14 @@
             window.location.href = "{{ route('departments.index') }}";
         });
     </script>
+    <script>
+    const deleteModal = document.getElementById('deleteModal');
+
+    deleteModal.addEventListener('show.bs.modal', function (event) {
+        const button = event.relatedTarget;
+        const action = button.getAttribute('data-action');
+        const form = deleteModal.querySelector('#deleteForm');
+        form.action = action;
+    });
+    </script>
 @endpush

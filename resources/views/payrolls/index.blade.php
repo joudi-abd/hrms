@@ -10,7 +10,7 @@
                     <div class="mb-2 mb-lg-0 d-flex justify-content-between align-items-center">
                         <h1 class="mb-0 fw-bold">{{__('Payrolls')}}</h1>
                         <div class="d-flex">
-                            @can('genrate' , App\Models\Payroll::class)
+                            @can('generate' , App\Models\Payroll::class)
                                 <button class="btn btn-primary ms-3 py-2" {{ $monthCreated ? 'disabled' : '' }} data-bs-toggle="modal" data-bs-target="#generatePayrollModal">
                                     <h4 class="mb-0 text-white">
                                         <i class="fa-solid fa-file-invoice-dollar me-3"></i>{{__('Generate Payrolls')}}
