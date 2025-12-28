@@ -33,7 +33,7 @@
                            name="code"
                            class="form-control"
                            placeholder="{{ __('Enter 2FA code from app') }}"
-                           required autofocus>
+                           autofocus>
                 </div>
 
                 <div class="mb-3">

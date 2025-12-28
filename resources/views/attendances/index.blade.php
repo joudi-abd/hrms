@@ -101,7 +101,7 @@
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
                                     @can('view', $userAttendanceToday)
-                                        <td>{{ $attendance->employee->name }}</td>
+                                        <td>{{ $attendance->employee->name ?? 'N/A' }}</td>
                                         <td>{{ $attendance->employee->department->name ?? 'N/A' }}</td>
                                     @endcan
                                     <td>{{ $attendance->date }}</td>

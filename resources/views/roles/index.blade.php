@@ -40,9 +40,9 @@
                                             <td>{{ $role->name }}</td>
                                             <td class="d-flex justify-content-center align-items-center gap-2">    
                                                 @can('update',$role)
-                                                <button href="{{ route('roles.edit', $role->id) }}" class="action-btn edit" title="edit">
+                                                <a href="{{ route('roles.edit', $role->id) }}" class="action-btn edit" title="edit">
                                                     <i class="fas fa-edit"></i>
-                                                </button>
+                                                </a>
                                                 @endcan
                                                 @can('delete',$role)
                                                     <button type="button" class="action-btn reject" title="delete" data-bs-toggle="modal" data-bs-target="#deleteModal" data-action="{{ route('roles.destroy', $role->id) }}">
