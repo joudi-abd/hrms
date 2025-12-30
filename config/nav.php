@@ -37,7 +37,7 @@
             'title' => 'My Department',
             'route' => 'departments.show',
             'route_params' => fn() => auth()->user()->department_id,
-            'icon' => 'bi-building',
+            'icon' => 'bi-building-check',
             'ability' => 'viewOwn',
             'active' => 'departments.show',
             'model' => \App\Models\Department::class,

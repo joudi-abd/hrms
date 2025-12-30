@@ -26,7 +26,7 @@
         }
         .hero {
             text-align: center;
-            padding: 120px 20px;
+            padding: 90px 20px;
             background: url('https://source.unsplash.com/1600x600/?office,team') no-repeat center center;
             background-size: cover;
             color: #fff;
